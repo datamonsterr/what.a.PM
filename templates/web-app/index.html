@@ -1,0 +1,27 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>&lt;Tool name&gt;</title>
+  <!-- A small standalone learning tool (calculator, simulator, canvas). Copy this folder to
+       labs/<kebab-name>/ and adjust the stylesheet path (labs/<name>/ → ../../app/css/app.css). -->
+  <link rel="stylesheet" href="../../app/css/app.css">
+  <link rel="stylesheet" href="app.css">
+</head>
+<body>
+  <header class="topbar"><div class="topbar-inner"><a class="brand" href="../../index.html"><span class="brand-mark">w.</span>what.a.PM</a><span class="chip">&lt;Tool name&gt;</span></div></header>
+  <main class="wrap">
+    <h1 style="margin-top:20px">&lt;Tool name&gt;</h1>
+    <p class="muted">&lt;What question this tool helps answer&gt;</p>
+    <form id="form" class="card">
+      <label>Item <input name="name" required></label>
+      <label>Value (1-20) <input name="value" type="number" min="1" max="20" value="5"></label>
+      <label>Effort (1-20) <input name="effort" type="number" min="1" max="20" value="3"></label>
+      <button class="btn">Add</button>
+    </form>
+    <section><div class="card table-scroll" id="list"></div></section>
+  </main>
+  <script src="app.js"></script>
+</body>
+</html>

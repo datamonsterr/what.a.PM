@@ -1,0 +1,48 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>RICE vs WSJF</title>
+  <link rel="stylesheet" href="../../../../app/css/app.css">
+  <style>
+    body { background: var(--surface); padding: 16px; }
+    .cols { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 14px; }
+    .col { border-radius: 14px; padding: 16px; border: 2px solid var(--line); }
+    .rice { border-color: var(--u1); } .wsjf { border-color: var(--u2); }
+    .formula { font: 800 1.25rem/1.3 var(--font); text-align: center; padding: 12px 6px; border-radius: 10px; background: var(--surface-2); margin: 8px 0 12px; }
+    .frac { display: inline-flex; flex-direction: column; vertical-align: middle; }
+    .frac span:first-child { border-bottom: 2px solid currentColor; padding: 0 4px; }
+    dl { margin: 0; } dt { font-weight: 800; margin-top: 8px; } dd { margin: 0; color: var(--muted); font-size: .9rem; }
+    .root { margin-top: 16px; padding: 14px; border-radius: 14px; background: color-mix(in srgb, var(--gold) 12%, var(--surface)); border: 2px solid var(--gold); }
+  </style>
+</head>
+<body>
+  <h2 style="text-align:center">Two formulas, one idea: value ÷ effort</h2>
+  <div class="cols">
+    <div class="col rice">
+      <h3>RICE <span class="badge">Intercom</span></h3>
+      <div class="formula"><span class="frac"><span>Reach × Impact × Confidence</span><span>Effort</span></span></div>
+      <dl>
+        <dt>Reach</dt><dd>People or events per time period (e.g. users per quarter). A real count.</dd>
+        <dt>Impact</dt><dd>Per person: 3 massive · 2 high · 1 medium · 0.5 low · 0.25 minimal.</dd>
+        <dt>Confidence</dt><dd>100% high · 80% medium · 50% low. Discounts your own optimism.</dd>
+        <dt>Effort</dt><dd>Person-months across product, design and engineering.</dd>
+      </dl>
+      <p class="small"><strong>Best for:</strong> comparing product ideas where reach can be counted.</p>
+    </div>
+    <div class="col wsjf">
+      <h3>WSJF <span class="badge">SAFe</span></h3>
+      <div class="formula"><span class="frac"><span>Cost of Delay</span><span>Job Size</span></span></div>
+      <dl>
+        <dt>Cost of Delay =</dt><dd>User-business value + Time criticality + Risk reduction / opportunity enablement.</dd>
+        <dt>Time criticality</dt><dd>Does value drop if we wait? Deadlines, market windows, regulation.</dd>
+        <dt>Risk reduction / opportunity</dt><dd>Does doing it lower risk or unlock future work?</dd>
+        <dt>Job size</dt><dd>Relative size (a proxy for duration). Scored 1, 2, 3, 5, 8, 13, 20 with the smallest item in each column set to 1.</dd>
+      </dl>
+      <p class="small"><strong>Best for:</strong> sequencing larger features where timing and risk matter.</p>
+    </div>
+  </div>
+  <div class="root"><strong>🧱 The ground underneath both:</strong> capacity is finite (FP-001), value is judged by customers (FP-002), and delay costs value (FP-004). WSJF makes delay explicit; RICE makes uncertainty explicit through Confidence.</div>
+</body>
+</html>

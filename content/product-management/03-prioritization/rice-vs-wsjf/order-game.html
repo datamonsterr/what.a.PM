@@ -1,0 +1,60 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Which goes first?</title>
+  <link rel="stylesheet" href="../../../../app/css/app.css">
+  <style>
+    body { background: var(--surface); padding: 16px; }
+    .pair { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+    @media (max-width: 520px) { .pair { grid-template-columns: 1fr; } }
+    .item { text-align: left; padding: 14px; border-radius: 14px; border: 2px solid var(--line); background: var(--bg); color: var(--ink); font: inherit; cursor: pointer; }
+    .item h3 { margin-bottom: 6px; font-size: 1rem; }
+    .item table { font-size: .85rem; } .item td { padding: 3px 4px; }
+    .item.win { border-color: var(--ok); } .item.lose { opacity: .55; }
+  </style>
+</head>
+<body>
+  <p class="small muted" id="hint"></p>
+  <div id="game"></div>
+  <script>
+    /* Custom lesson game: pick which backlog item should go first, then see the math.
+       Synthetic items. Reports to the lesson player via postMessage. */
+    const rounds = [
+      { model: "WSJF", a: { name: "Card-testing block at checkout", bv: 8, tc: 13, rr: 8, size: 5 }, b: { name: "Redesign the settings page", bv: 5, tc: 1, rr: 1, size: 3 } },
+      { model: "RICE", a: { name: "Saved places for riders", reach: 40000, impact: 1, conf: 0.8, effort: 2 }, b: { name: "Trip-sharing with family", reach: 8000, impact: 2, conf: 0.5, effort: 3 } },
+      { model: "WSJF", a: { name: "Big new loyalty programme", bv: 13, tc: 3, rr: 2, size: 20 }, b: { name: "Fix payout delay before new labour rule", bv: 5, tc: 8, rr: 5, size: 3 } },
+      { model: "RICE", a: { name: "Dark mode", reach: 30000, impact: 0.25, conf: 1, effort: 1 }, b: { name: "Fewer failed card payments abroad", reach: 6000, impact: 2, conf: 0.8, effort: 2 } }
+    ];
+    const score = it => it.size ? (it.bv + it.tc + it.rr) / it.size : it.reach * it.impact * it.conf / it.effort;
+    const fmt = n => n >= 100 ? Math.round(n).toLocaleString() : n.toFixed(1);
+    const rows = (r, it) => r.model === "WSJF"
+      ? `<tr><td>Business value</td><td>${it.bv}</td></tr><tr><td>Time criticality</td><td>${it.tc}</td></tr><tr><td>Risk reduction</td><td>${it.rr}</td></tr><tr><td>Job size</td><td>${it.size}</td></tr>`
+      : `<tr><td>Reach / qtr</td><td>${it.reach.toLocaleString()}</td></tr><tr><td>Impact</td><td>${it.impact}</td></tr><tr><td>Confidence</td><td>${it.conf * 100}%</td></tr><tr><td>Effort (pm)</td><td>${it.effort}</td></tr>`;
+    let i = 0, right = 0;
+    const el = document.getElementById("game"), hint = document.getElementById("hint");
+    function round() {
+      if (i >= rounds.length) return end();
+      const r = rounds[i];
+      hint.textContent = `Round ${i + 1}/${rounds.length} · ${r.model}. Which should the team do first? Estimate in your head, then pick.`;
+      el.innerHTML = `<div class="pair">${["a", "b"].map(k => `<button class="item" data-k="${k}"><h3>${r[k].name}</h3><table>${rows(r, r[k])}</table><p class="small muted" data-score></p></button>`).join("")}</div><p id="why"></p>`;
+      el.querySelectorAll(".item").forEach(btn => btn.onclick = () => {
+        const best = score(r.a) >= score(r.b) ? "a" : "b", ok = btn.dataset.k === best; if (ok) right++;
+        el.querySelectorAll(".item").forEach(b => { b.disabled = true; b.classList.add(b.dataset.k === best ? "win" : "lose");
+          b.querySelector("[data-score]").textContent = r.model + " score: " + fmt(score(r[b.dataset.k])); });
+        document.getElementById("why").innerHTML = `<strong class="${ok ? "feedback-ok" : "feedback-bad"}">${ok ? "✓ Right" : "✗ Not this time"}.</strong> ${r.model === "WSJF"
+          ? "WSJF = (value + time criticality + risk reduction) ÷ job size. Small, urgent work often beats big, impressive work."
+          : "RICE = reach × impact × confidence ÷ effort. Huge reach with tiny impact can still lose."}<br><br><button class="btn" id="go">Next</button>`;
+        document.getElementById("go").onclick = () => { i++; round(); };
+      });
+    }
+    function end() {
+      hint.textContent = "";
+      el.innerHTML = `<div class="celebrate"><div class="big">${right === rounds.length ? "🏆" : "⚖️"}</div><h2>${right}/${rounds.length} calls right</h2><p class="muted">Press Continue in the lesson.</p></div>`;
+      parent.postMessage({ type: "wapm:game", score: right, total: rounds.length, done: true }, "*");
+    }
+    round();
+  </script>
+</body>
+</html>

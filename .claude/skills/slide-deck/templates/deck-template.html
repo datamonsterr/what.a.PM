@@ -1,0 +1,113 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>DECK TITLE</title>
+<style>
+  :root {
+    --bg: #ffffff; --text: #111827; --muted: #6b7280; --accent: #2563eb; --alert: #dc2626; --line: #e5e7eb;
+    --font: Inter, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  }
+  [data-theme="dark"] { --bg: #0b0f17; --text: #f3f4f6; --muted: #9ca3af; --line: #1f2937; }
+  * { box-sizing: border-box; margin: 0; }
+  html, body { height: 100%; background: var(--bg); color: var(--text); font-family: var(--font); }
+  .slide { display: none; width: 100vw; height: 100vh; aspect-ratio: 16/9; padding: 64px 80px; flex-direction: column; gap: 32px; }
+  .slide.active { display: flex; }
+  h1 { font-size: 56px; font-weight: 600; line-height: 1.1; letter-spacing: -0.02em; }
+  h2 { font-size: 40px; font-weight: 600; line-height: 1.15; letter-spacing: -0.01em; max-width: 28ch; }
+  p, li { font-size: 24px; line-height: 1.45; color: var(--text); }
+  ul { padding-left: 1.2em; display: grid; gap: 12px; }
+  .muted { color: var(--muted); }
+  .accent { color: var(--accent); }
+  .alert { color: var(--alert); }
+  .kicker { font-size: 16px; text-transform: uppercase; letter-spacing: .12em; color: var(--accent); font-weight: 600; }
+  .footnote { margin-top: auto; font-size: 14px; color: var(--muted); border-top: 1px solid var(--line); padding-top: 12px; }
+  .cols { display: grid; grid-template-columns: 1fr 1fr; gap: 48px; flex: 1; }
+  .big { font-size: 48px; font-weight: 600; line-height: 1.2; max-width: 24ch; }
+  .metric { font-size: 96px; font-weight: 700; letter-spacing: -0.03em; }
+  figure { flex: 1; display: flex; align-items: center; justify-content: center; }
+  figure img, figure svg { max-width: 100%; max-height: 100%; }
+  table { border-collapse: collapse; font-size: 20px; width: 100%; }
+  th, td { text-align: left; padding: 10px 12px; border-bottom: 1px solid var(--line); }
+  th { color: var(--muted); font-weight: 600; }
+  [data-layout="title"] { justify-content: center; }
+  [data-layout="statement"], [data-layout="section-divider"] { justify-content: center; }
+  [data-layout="section-divider"] { background: var(--text); color: var(--bg); }
+  [data-layout="section-divider"] h2 { color: var(--bg); }
+  .notes { display: none; }
+  .progress { position: fixed; bottom: 0; left: 0; height: 4px; background: var(--accent); transition: width .2s; }
+  .pageno { position: fixed; bottom: 16px; right: 24px; font-size: 14px; color: var(--muted); }
+  body.print .slide { display: flex; page-break-after: always; height: 100vh; }
+  body.print .progress, body.print .pageno { display: none; }
+  @media print { .slide { display: flex !important; page-break-after: always; } .progress, .pageno { display: none; } @page { size: 1600px 900px; margin: 0; } }
+</style>
+</head>
+<body>
+
+<section class="slide" data-layout="title">
+  <div class="kicker">Ride-hailing · Trust &amp; Safety</div>
+  <h1>Deck title as a takeaway</h1>
+  <p class="muted">Audience · Date · Presenter</p>
+  <aside class="notes">Why we are here and what we need from this room.</aside>
+</section>
+
+<section class="slide" data-layout="statement">
+  <div class="kicker">Executive summary</div>
+  <p class="big">One-sentence answer. <span class="accent">The ask: approve X by date.</span></p>
+  <aside class="notes">Governing thought. Everything after supports this.</aside>
+</section>
+
+<section class="slide" data-layout="two-column">
+  <h2>Action title that states the point of this slide</h2>
+  <div class="cols">
+    <div><div class="metric accent">1.8%</div><p class="muted">of GMV lost to X, Q3 2026</p></div>
+    <ul><li>Evidence one</li><li>Evidence two</li><li>Evidence three</li></ul>
+  </div>
+  <div class="footnote">Source: internal risk dashboard, Q3 2026.</div>
+  <aside class="notes">Talk track.</aside>
+</section>
+
+<section class="slide" data-layout="diagram">
+  <h2>Flow title from the diagram-builder skill</h2>
+  <figure><img src="assets/diagrams/example.sequence.svg" alt="Describe the diagram"></figure>
+  <aside class="notes">Walk through the numbered steps.</aside>
+</section>
+
+<section class="slide" data-layout="ask">
+  <div class="kicker">Decision needed</div>
+  <h2>Approve option B to cut payout fraud by ~30% within two quarters</h2>
+  <table>
+    <tr><th>Option</th><th>Impact</th><th>Effort</th><th>Risk</th></tr>
+    <tr><td>A</td><td>Low</td><td>S</td><td>Low</td></tr>
+    <tr><td><b>B (recommended)</b></td><td>High</td><td>M</td><td>Med</td></tr>
+  </table>
+  <aside class="notes">Restate the ask, owners and dates.</aside>
+</section>
+
+<div class="progress"></div><div class="pageno"></div>
+<script>
+  const slides = [...document.querySelectorAll('.slide')];
+  let i = Math.max(0, Math.min(slides.length - 1, parseInt(location.hash.slice(1) || '1', 10) - 1));
+  const bar = document.querySelector('.progress'), no = document.querySelector('.pageno');
+  function show(n) {
+    i = Math.max(0, Math.min(slides.length - 1, n));
+    slides.forEach((s, k) => s.classList.toggle('active', k === i));
+    bar.style.width = ((i + 1) / slides.length * 100) + '%';
+    no.textContent = (i + 1) + ' / ' + slides.length;
+    history.replaceState(null, '', '#' + (i + 1));
+  }
+  document.addEventListener('keydown', e => {
+    if (['ArrowRight', 'PageDown', ' '].includes(e.key)) show(i + 1);
+    if (['ArrowLeft', 'PageUp'].includes(e.key)) show(i - 1);
+    if (e.key === 'Home') show(0);
+    if (e.key === 'End') show(slides.length - 1);
+    if (e.key === 'p' || e.key === 'P') document.body.classList.toggle('print');
+    if (e.key === 'd' || e.key === 'D') document.documentElement.dataset.theme = document.documentElement.dataset.theme === 'dark' ? '' : 'dark';
+    if (e.key === 'n' || e.key === 'N') console.log(slides[i].querySelector('.notes')?.textContent.trim());
+  });
+  document.addEventListener('click', e => { if (!e.target.closest('a')) show(e.clientX > innerWidth / 2 ? i + 1 : i - 1); });
+  show(i);
+</script>
+</body>
+</html>

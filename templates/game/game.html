@@ -1,0 +1,48 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Lesson game</title>
+  <!-- Path assumes this file sits in content/<domain>/<unit>/<lesson>/ -->
+  <link rel="stylesheet" href="../../../../app/css/app.css">
+  <style>
+    body { background: var(--surface); padding: 16px; }
+    .choice { display: block; width: 100%; text-align: left; margin: 8px 0; padding: 14px; border-radius: 12px; border: 2px solid var(--line); background: var(--bg); color: var(--ink); font: 600 1rem var(--font); cursor: pointer; }
+  </style>
+</head>
+<body>
+  <p class="small muted" id="hint"></p>
+  <div id="game"></div>
+  <script>
+    /* Custom game skeleton: rounds of "pick the best option" with feedback.
+     * Contract with the lesson player: when the game ends, call
+     *   parent.postMessage({ type: "wapm:game", score, total, done: true }, "*")
+     * The player then unlocks Continue and gives bonus XP. Use synthetic data only. */
+    const rounds = [
+      { prompt: "<Scenario 1>", options: ["<Option A>", "<Option B>"], best: 0, why: "<Why A>" },
+      { prompt: "<Scenario 2>", options: ["<Option A>", "<Option B>", "<Option C>"], best: 2, why: "<Why C>" }
+    ];
+    let i = 0, score = 0;
+    const el = document.getElementById("game"), hint = document.getElementById("hint");
+    function round() {
+      if (i >= rounds.length) return end();
+      const r = rounds[i];
+      hint.textContent = `Round ${i + 1}/${rounds.length}`;
+      el.innerHTML = `<h3>${r.prompt}</h3>${r.options.map((o, k) => `<button class="choice" data-k="${k}">${o}</button>`).join("")}<p id="why"></p>`;
+      el.querySelectorAll(".choice").forEach(b => b.onclick = () => {
+        const ok = +b.dataset.k === r.best; if (ok) score++;
+        el.querySelectorAll(".choice").forEach(c => { c.disabled = true; if (+c.dataset.k === r.best) c.style.borderColor = "var(--ok)"; });
+        document.getElementById("why").innerHTML = `<strong class="${ok ? "feedback-ok" : "feedback-bad"}">${ok ? "✓" : "✗"}</strong> ${r.why}<br><br><button class="btn" id="go">Next</button>`;
+        document.getElementById("go").onclick = () => { i++; round(); };
+      });
+    }
+    function end() {
+      hint.textContent = "";
+      el.innerHTML = `<div class="celebrate"><div class="big">🏆</div><h2>${score}/${rounds.length}</h2><p class="muted">Press Continue in the lesson.</p></div>`;
+      parent.postMessage({ type: "wapm:game", score, total: rounds.length, done: true }, "*");
+    }
+    round();
+  </script>
+</body>
+</html>

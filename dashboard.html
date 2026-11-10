@@ -1,0 +1,32 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>what.a.PM · Dashboard</title>
+  <link rel="stylesheet" href="app/css/app.css">
+</head>
+<body>
+  <header class="topbar"><div class="topbar-inner" id="hud"></div></header>
+  <main class="wrap">
+    <h1 style="margin-top:20px">Your learning dashboard</h1>
+    <div class="tiles" id="tiles"></div>
+    <section><h2>XP, last 28 days</h2><div class="card" id="chart"></div></section>
+    <section><h2>Path progress</h2><div class="card" id="domains"></div></section>
+    <section><h2>Weak spots</h2><div class="card" id="weak"></div></section>
+    <section><h2>Quiz history</h2><div class="card table-scroll" id="history"></div></section>
+    <section><h2>Your records</h2><div class="card">
+      <p class="small muted">Progress is saved in this browser. Export it to keep a permanent record in the repo (<code>records/</code>) or to move to another device.</p>
+      <p style="display:flex;gap:10px;flex-wrap:wrap">
+        <button class="btn" id="export">Export progress</button>
+        <label class="btn btn-ghost">Import<input type="file" id="import" accept="application/json" hidden></label>
+        <label class="small" style="align-self:center">Daily goal
+          <select id="goal"><option>10</option><option>20</option><option>30</option><option>50</option></select> XP</label>
+        <button class="btn btn-ghost" id="reset">Reset</button>
+      </p></div></section>
+  </main>
+  <script src="app/js/store.js"></script>
+  <script src="app/js/registry.js"></script>
+  <script src="app/js/dashboard.js"></script>
+</body>
+</html>

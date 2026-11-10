@@ -1,0 +1,36 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>what.a.PM · First principles</title>
+  <link rel="stylesheet" href="app/css/app.css">
+  <style>
+    .layers { position: relative; }
+    .layer { margin: 18px 0; }
+    .layer h3 { font-size: .8rem; text-transform: uppercase; letter-spacing: .08em; color: var(--muted); margin-bottom: 8px; }
+    .layer-row { display: flex; flex-wrap: wrap; gap: 12px; position: relative; z-index: 1; }
+    .pcard { flex: 1 1 200px; max-width: 340px; background: var(--surface); border: 2px solid var(--line); border-radius: 14px; padding: 12px 14px; cursor: pointer; text-align: left; font: inherit; color: inherit; }
+    .pcard.axiom { border-color: color-mix(in srgb, var(--gold) 70%, var(--line)); background: color-mix(in srgb, var(--gold) 8%, var(--surface)); }
+    .pcard.dim { opacity: .3; }
+    .pcard.hit { border-color: var(--accent); box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent) 25%, transparent); }
+    .pcard .id { font-weight: 800; font-size: .75rem; color: var(--muted); }
+    .ground { margin-top: 6px; padding: 8px 12px; border-top: 4px solid var(--gold); color: var(--muted); font-size: .8rem; text-transform: uppercase; letter-spacing: .1em; text-align: center; }
+    #links { position: absolute; inset: 0; pointer-events: none; z-index: 0; overflow: visible; }
+    #detail { margin-top: 24px; }
+  </style>
+</head>
+<body>
+  <header class="topbar"><div class="topbar-inner" id="hud"></div></header>
+  <main class="wrap">
+    <h1 style="margin-top:20px">First principles</h1>
+    <p class="muted">Each lesson starts from a question and digs down until it hits something you accept as true without further proof (the ground layer). What you build back up becomes a new principle. Tap a principle to see what it rests on and what rests on it.</p>
+    <div class="layers" id="layers"><svg id="links"></svg></div>
+    <div class="ground">Ground: things we accept without further proof</div>
+    <div id="detail"></div>
+  </main>
+  <script src="app/js/store.js"></script>
+  <script src="app/js/registry.js"></script>
+  <script src="app/js/principles-map.js"></script>
+</body>
+</html>

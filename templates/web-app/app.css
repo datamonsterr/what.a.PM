@@ -1,0 +1,4 @@
+/* Tool-specific styles. Shared tokens come from app/css/app.css. */
+form.card { display: grid; gap: 12px; }
+form label { display: grid; gap: 4px; font-weight: 600; }
+form input { font: inherit; padding: 10px 12px; border-radius: 10px; border: 2px solid var(--line); background: var(--bg); color: var(--ink); }

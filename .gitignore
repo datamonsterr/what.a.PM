@@ -1,0 +1,19 @@
+# Local secrets / machine config
+.env
+.mcp.json
+.claude/settings.local.json
+
+# hyperresearch local index/cache (if installed)
+.hyperresearch/*.db
+.hyperresearch/*.db-*
+.hyperresearch/cache/
+
+# OS / editor
+.DS_Store
+Thumbs.db
+desktop.ini
+~$*
+.vscode/
+.idea/
+node_modules/
+__pycache__/

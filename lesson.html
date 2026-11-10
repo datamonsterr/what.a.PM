@@ -1,0 +1,24 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>what.a.PM · Lesson</title>
+  <link rel="stylesheet" href="app/css/app.css">
+</head>
+<body>
+  <header class="topbar"><div class="topbar-inner">
+    <a class="chip" href="index.html" aria-label="Back to path">✕</a>
+    <div class="lesson-progress"><i id="bar" style="width:0%"></i></div>
+    <span class="chip chip-streak" id="streak"></span>
+  </div></header>
+  <main class="wrap" style="padding-top:20px"><div id="stage"></div></main>
+  <div class="footer-bar"><div class="wrap">
+    <span id="feedback" aria-live="polite"></span>
+    <button class="btn" id="next">Continue</button>
+  </div></div>
+  <script src="app/js/store.js"></script>
+  <script src="app/js/registry.js"></script>
+  <script src="app/js/lesson.js"></script>
+</body>
+</html>

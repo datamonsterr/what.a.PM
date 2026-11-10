@@ -1,0 +1,60 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Sort game</title>
+  <link rel="stylesheet" href="../css/app.css">
+  <style>
+    body { background: var(--surface); padding: 16px; }
+    .card-item { padding: 16px; border-radius: 14px; border: 2px solid var(--line); background: var(--bg); font-weight: 600; font-size: 1.05rem; margin: 12px 0; min-height: 80px; }
+    .buckets { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 10px; }
+    .bucket { padding: 16px 10px; border-radius: 14px; border: 2px dashed var(--accent); background: color-mix(in srgb, var(--accent) 6%, var(--surface)); font: 700 1rem var(--font); color: var(--ink); cursor: pointer; }
+    .meter { display: flex; gap: 4px; margin-bottom: 8px; }
+    .meter i { flex: 1; height: 8px; border-radius: 4px; background: var(--surface-2); }
+    .meter i.ok { background: var(--ok); } .meter i.bad { background: var(--bad); }
+  </style>
+</head>
+<body>
+  <div id="game"></div>
+  <script>
+    /* Reusable engine. Data file calls WAPM_GAME({ instructions, buckets:[{id,label}], items:[{text,bucket,why}] }).
+       Reports to the lesson player with postMessage({type:"wapm:game", score, total, done:true}). */
+    window.WAPM_GAME = cfg => start(cfg);
+    const esc = s => String(s ?? "").replace(/[&<>"]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
+    const data = new URLSearchParams(location.search).get("data");
+    const el = document.getElementById("game");
+    if (!data || !/^[\w\-./]+\.js$/.test(data) || data.includes("..")) el.textContent = "Missing or invalid ?data= file.";
+    else { const s = document.createElement("script"); s.src = "../../" + data; s.onerror = () => el.textContent = "Could not load " + data; document.head.appendChild(s); }
+
+    function start(cfg) {
+      const items = cfg.items.slice().sort(() => Math.random() - .5);
+      let i = 0, score = 0; const marks = [];
+      function round() {
+        if (i >= items.length) return end();
+        const it = items[i];
+        el.innerHTML = `<div class="meter">${items.map((_, k) => `<i class="${marks[k] || ""}"></i>`).join("")}</div>
+          <p class="muted small">${esc(cfg.instructions)}</p>
+          <div class="card-item">“${esc(it.text)}”</div>
+          <div class="buckets">${cfg.buckets.map(b => `<button class="bucket" data-b="${b.id}">${esc(b.label)}</button>`).join("")}</div>
+          <p id="why" class="small"></p>`;
+        el.querySelectorAll(".bucket").forEach(btn => btn.onclick = () => {
+          const ok = btn.dataset.b === it.bucket; if (ok) score++;
+          marks[i] = ok ? "ok" : "bad";
+          el.querySelectorAll(".bucket").forEach(b => { b.disabled = true; if (b.dataset.b === it.bucket) b.style.borderColor = "var(--ok)"; });
+          document.getElementById("why").innerHTML = `<strong class="${ok ? "feedback-ok" : "feedback-bad"}">${ok ? "✓ Right" : "✗ Not quite"}.</strong> ${esc(it.why || "")}
+            <br><br><button class="btn" id="go">Next</button>`;
+          document.getElementById("go").onclick = () => { i++; round(); };
+        });
+      }
+      function end() {
+        el.innerHTML = `<div class="celebrate"><div class="big">${score === items.length ? "🏆" : "🎯"}</div><h2>${score}/${items.length} sorted correctly</h2>
+          <p class="muted">${esc(cfg.outro || "Press Continue in the lesson.")}</p><button class="btn btn-ghost" id="again">Play again</button></div>`;
+        document.getElementById("again").onclick = () => { i = 0; score = 0; marks.length = 0; round(); };
+        parent.postMessage({ type: "wapm:game", score, total: items.length, done: true }, "*");
+      }
+      round();
+    }
+  </script>
+</body>
+</html>

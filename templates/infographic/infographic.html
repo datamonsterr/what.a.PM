@@ -1,0 +1,27 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Infographic</title>
+  <!-- Path assumes this file sits in content/<domain>/<unit>/<lesson>/ -->
+  <link rel="stylesheet" href="../../../../app/css/app.css">
+  <style>
+    body { background: var(--surface); padding: 16px; }
+    .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 14px; }
+    .panel { border: 2px solid var(--line); border-radius: 14px; padding: 16px; }
+    .big { font: 800 1.3rem var(--font); text-align: center; padding: 10px; background: var(--surface-2); border-radius: 10px; }
+    .ground { margin-top: 16px; padding: 14px; border-radius: 14px; border: 2px solid var(--gold); background: color-mix(in srgb, var(--gold) 12%, var(--surface)); }
+  </style>
+</head>
+<body>
+  <!-- One message per infographic. Title states the takeaway, panels show the parts,
+       the gold box names the first principles underneath. -->
+  <h2 style="text-align:center">&lt;The one takeaway, as a sentence&gt;</h2>
+  <div class="grid">
+    <div class="panel"><h3>&lt;Part 1&gt;</h3><div class="big">&lt;Formula or key number&gt;</div><p class="small">&lt;Explain in one or two lines&gt;</p></div>
+    <div class="panel"><h3>&lt;Part 2&gt;</h3><div class="big">&lt;…&gt;</div><p class="small">&lt;…&gt;</p></div>
+  </div>
+  <div class="ground"><strong>🧱 Ground underneath:</strong> FP-xxx &lt;title&gt;, FP-yyy &lt;title&gt;.</div>
+</body>
+</html>
